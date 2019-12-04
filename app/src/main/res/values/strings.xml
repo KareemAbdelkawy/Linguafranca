@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Lingua franca</string>
+    <string name="inText">From</string>
+    <string name="outText">To</string>
 </resources>

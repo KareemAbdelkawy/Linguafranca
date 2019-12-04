@@ -3,6 +3,7 @@ package com.example.linguafranca;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,8 +24,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    TextToSpeech t1;
     TextView input,output;
     Button translate,listen;
     private RequestQueue queue;
@@ -41,10 +44,15 @@ public class MainActivity extends AppCompatActivity {
         Spinner spinnerfrom = findViewById(R.id.spinnerfrom);
         Spinner spinnerto = findViewById(R.id.spinnerto);
         ArrayList<String> arrayList = new ArrayList<>();
+
         arrayList.add("English");
         arrayList.add("Arabic");
         arrayList.add("Spanish");
         arrayList.add("German");
+
+
+
+
         final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, arrayList);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerfrom.setAdapter(arrayAdapter);
@@ -67,18 +75,52 @@ public class MainActivity extends AppCompatActivity {
                     case "English" :
                         langCode = "en";
                         Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.UK);
+                                }
+                            }
+                        });
+
                         break;
                     case "Spanish":
                         langCode = "es";
                         Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.ITALY);
+                                }
+                            }
+                        });
+
                         break;
                     case "Arabic":
                         langCode = "ar";
                         Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.GERMAN);
+                                }
+                            }
+                        });
                         break;
                     case "German":
                         langCode = "de";
                         Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.GERMAN);
+                                }
+                            }
+                        });
                         break;
                     default:
                         langCode = "en";
@@ -92,6 +134,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        listen.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                // first StringRequest: getting items searched
+                StringRequest stringRequest = searchNameStringRequest(output.getText().toString(),"en","ar");
+
+
+
+                // executing the request (adding to queue)
+                queue.add(stringRequest);
+
+                String toSpeak = output.getText().toString();
+
+                t1.speak(toSpeak, TextToSpeech.QUEUE_FLUSH, null);
+            }
+
+
+        });
 
         translate.setOnClickListener(new View.OnClickListener() {
 
@@ -133,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                         // see API's documentation for returned format
                         try {
                             JSONObject result = new JSONObject(response);
-                            JSONArray resultList = result.getJSONArray("outputs");
+                            JSONArray resultList  = result.getJSONArray("outputs");
                             JSONObject inner = resultList.getJSONObject(0);
                             String out = inner.getString("output");
                             output.setText(" "+out);

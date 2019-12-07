@@ -1,5 +1,6 @@
 package com.example.linguafranca;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
     private StringRequest searchNameStringRequest(String input,String source , String dist) {
 
-        String url = "https://api-platform.systran.net/translation/text/translate?input="+input+"&source=en&target="+dist+"&withSource=false&withAnnotations=false&backTranslation=false&encoding=utf-8&key=236dd6f0-0ccb-4d3f-bd43-e8c40f6ddd48";
+        String url = getString(R.string.header1) +input+getString(R.string.header2)+dist+getString(R.string.header3)+getString(R.string.key);
 
         // 1st param => type of method (GET/PUT/POST/PATCH/etc)
         // 2nd param => complete url of the API

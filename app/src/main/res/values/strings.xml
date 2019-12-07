@@ -2,4 +2,8 @@
     <string name="app_name">Lingua franca</string>
     <string name="inText">From</string>
     <string name="outText">To</string>
+    <string name="header1">https://api-platform.systran.net/translation/text/translate?input=</string>
+    <string name="header2">&amp;source=en&amp;target=</string>
+    <string name="header3">&amp;withSource=false&amp;withAnnotations=false&amp;backTranslation=false&amp;encoding=utf-8&amp;key=</string>
+    <string name="key">236dd6f0-0ccb-4d3f-bd43-e8c40f6ddd48</string>
 </resources>

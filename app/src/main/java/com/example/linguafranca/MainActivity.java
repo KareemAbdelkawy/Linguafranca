@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     TextView input,output;
     Button translate,listen;
     private RequestQueue queue;
-    String langCode;
+    String langCodeIn;
+    String langCodeOut;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         queue = Volley.newRequestQueue(this);
@@ -60,8 +61,64 @@ public class MainActivity extends AppCompatActivity {
         spinnerfrom.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String tutorialsName = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(), "Selected: " + tutorialsName,Toast.LENGTH_LONG).show();
+                String lang = parent.getItemAtPosition(position).toString();
+                switch (lang){
+                    case "English" :
+                        langCodeIn = "en";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeIn,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.UK);
+                                }
+                            }
+                        });
+
+                        break;
+                    case "Spanish":
+                        langCodeIn = "es";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeIn,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.ITALY);
+                                }
+                            }
+                        });
+
+                        break;
+                    case "Arabic":
+                        langCodeIn = "ar";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeIn,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.GERMAN);
+                                }
+                            }
+                        });
+                        break;
+                    case "German":
+                        langCodeIn = "de";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeIn,Toast.LENGTH_LONG).show();
+                        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+                            @Override
+                            public void onInit(int status) {
+                                if(status != TextToSpeech.ERROR) {
+                                    t1.setLanguage(Locale.GERMAN);
+                                }
+                            }
+                        });
+                        break;
+                    default:
+                        langCodeIn = "en";
+                        Toast.makeText(parent.getContext(), "code default to: " + langCodeIn,Toast.LENGTH_LONG).show();
+
+                }
+                Toast.makeText(parent.getContext(), "Selected: " + langCodeIn,Toast.LENGTH_LONG).show();
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
@@ -74,8 +131,14 @@ public class MainActivity extends AppCompatActivity {
                 String lang = parent.getItemAtPosition(position).toString();
                 switch (lang){
                     case "English" :
-                        langCode = "en";
-                        Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        if(langCodeIn == "en"){
+                            Toast.makeText(parent.getContext(), "cannot translate from english to english",Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            langCodeOut = "en";
+                            Toast.makeText(parent.getContext(), "code changed to: " + langCodeOut,Toast.LENGTH_LONG).show();
+                        }
+
                         t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -87,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case "Spanish":
-                        langCode = "es";
-                        Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        langCodeOut = "es";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeOut,Toast.LENGTH_LONG).show();
                         t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -100,8 +163,8 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case "Arabic":
-                        langCode = "ar";
-                        Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        langCodeOut = "ar";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeOut,Toast.LENGTH_LONG).show();
                         t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -112,8 +175,8 @@ public class MainActivity extends AppCompatActivity {
                         });
                         break;
                     case "German":
-                        langCode = "de";
-                        Toast.makeText(parent.getContext(), "code changed to: " + langCode,Toast.LENGTH_LONG).show();
+                        langCodeOut = "de";
+                        Toast.makeText(parent.getContext(), "code changed to: " + langCodeOut,Toast.LENGTH_LONG).show();
                         t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
                             @Override
                             public void onInit(int status) {
@@ -124,11 +187,11 @@ public class MainActivity extends AppCompatActivity {
                         });
                         break;
                     default:
-                        langCode = "en";
-                        Toast.makeText(parent.getContext(), "code default to: " + langCode,Toast.LENGTH_LONG).show();
+                        langCodeOut = "en";
+                        Toast.makeText(parent.getContext(), "code default to: " + langCodeOut,Toast.LENGTH_LONG).show();
 
                 }
-                Toast.makeText(parent.getContext(), "Selected: " + langCode,Toast.LENGTH_LONG).show();
+                Toast.makeText(parent.getContext(), "Selected: " + langCodeOut,Toast.LENGTH_LONG).show();
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
@@ -164,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 // first StringRequest: getting items searched
-                StringRequest stringRequest = searchNameStringRequest(input.getText().toString(),"en",langCode);
+                StringRequest stringRequest = searchNameStringRequest(input.getText().toString(),langCodeIn,langCodeOut);
 
 
 
@@ -181,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     private StringRequest searchNameStringRequest(String input,String source , String dist) {
 
-        String url = getString(R.string.header1) +input+getString(R.string.header2)+dist+getString(R.string.header3)+getString(R.string.key);
+        String url = getString(R.string.header1)+input+getString(R.string.header2)+source+getString(R.string.header3)+dist+getString(R.string.header4)+getString(R.string.key);
 
         // 1st param => type of method (GET/PUT/POST/PATCH/etc)
         // 2nd param => complete url of the API

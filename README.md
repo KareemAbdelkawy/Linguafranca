@@ -1,2 +1,0 @@
-# Linguafranca
-# Gl in esports

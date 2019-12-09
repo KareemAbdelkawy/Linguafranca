@@ -120,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(parent.getContext(), "code default to: " + langCodeIn,Toast.LENGTH_LONG).show();
 
                 }
-                Toast.makeText(parent.getContext(), "Selected: " + langCodeIn,Toast.LENGTH_LONG).show();
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
                         Toast.makeText(parent.getContext(), "code default to: " + langCodeOut,Toast.LENGTH_LONG).show();
 
                 }
-                Toast.makeText(parent.getContext(), "Selected: " + langCodeOut,Toast.LENGTH_LONG).show();
+
             }
             @Override
             public void onNothingSelected(AdapterView <?> parent) {
@@ -281,7 +280,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // display a simple message on the screen
-                        Toast.makeText(MainActivity.this, "Code entered ErrorListener", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Code entered ErrorListener : no Internet", Toast.LENGTH_LONG).show();
                         System.out.println(error);
                         System.out.println("hiiii");
                     }
